@@ -23,7 +23,7 @@ resource "ibm_is_subnet" "joel_subnet" {
   name            = "joel-subnet"
   vpc             = ibm_is_vpc.joel_vpc.id
   zone            = "eu-gb-1"
-  ipv4_cidr_block = "10.10.0.0/24"
+  ipv4_cidr_block = "10.124.0.0/24"
   resource_group = var.resource_group
 }
 
@@ -79,17 +79,40 @@ resource "ibm_is_subnet" "joel_subnet_cluster" {
   name            = "joel-subnet-cluster"
   vpc             = ibm_is_vpc.joel_vpc_cluster.id
   zone            = "eu-gb-1"
-  ipv4_cidr_block = "10.50.0.0/24"
+  ipv4_cidr_block = "10.134.0.0/24"
   resource_group = var.resource_group
 }
 
-resource "ibm_container_cluster" "joel_cluster" {
-  name = "joel-cluster"
-  datacenter = "eu-gb-1"
-  machine_type    = "b3c.4x16"
-  hardware  = "shared"
-  kube_version = "4.3_openshift"
-  subnet_id = [ibm_is_subnet.joel_subnet_cluster.id]
-
-  default_pool_size = 1
+resource "ibm_resource_instance" "cos_instance" {
+  name     = "joel-cos-instance"
+  service  = "cloud-object-storage"
+  plan     = "standard"
+  location = "global"
 }
+
+resource "ibm_container_vpc_cluster" "joel_cluster" {
+  name              = "joel-vpc-cluster"
+  vpc_id            = ibm_is_vpc.joel_vpc_cluster.id
+  kube_version      = "4.3_openshift"
+  flavor            = "bx2.16x64"
+  worker_count      = "1"
+  entitlement       = "cloud_pak"
+  cos_instance_crn  = ibm_resource_instance.cos_instance.id
+  resource_group_id = var.resource_group
+  zones {
+      subnet_id = ibm_is_subnet.joel_subnet_cluster.id
+      name      = "eu-gb-1"
+    }
+}
+
+
+# resource "ibm_container_cluster" "joel_cluster" {
+#   name = "joel-cluster"
+#   datacenter = "eu-gb-1"
+#   machine_type    = "b3c.4x16"
+#   hardware  = "shared"
+#   kube_version = "4.3_openshift"
+#   subnet_id = [ibm_is_subnet.joel_subnet_cluster.id]
+
+#   default_pool_size = 1
+# }
