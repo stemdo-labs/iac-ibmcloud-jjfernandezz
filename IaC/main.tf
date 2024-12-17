@@ -45,7 +45,7 @@ resource "ibm_is_security_group_rule" "rule_ssh" {
 
 resource "ibm_is_ssh_key" "joel_sshkey" {
   name       = "joel-ssh"
-  public_key = file(var.ssh_key)
+  public_key = var.ssh_key
 }
 
 resource "ibm_is_instance" "joel_instance" {
