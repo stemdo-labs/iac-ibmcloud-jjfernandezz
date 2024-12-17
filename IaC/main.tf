@@ -78,12 +78,19 @@ resource "ibm_is_vpc" "joel_vpc_cluster" {
   resource_group = var.resource_group
 }
 
+resource "ibm_is_public_gateway" "cluster_gateway" {
+  name = "cluster-gateway"
+  vpc  = ibm_is_vpc.joel_vpc_cluster.id
+  zone = "eu-gb-1"
+}
+
 resource "ibm_is_subnet" "joel_subnet_cluster" {
   name            = "joel-subnet-cluster"
   vpc             = ibm_is_vpc.joel_vpc_cluster.id
   zone            = "eu-gb-1"
   ipv4_cidr_block = "10.242.0.0/18"
   resource_group = var.resource_group
+  public_gateway = ibm_is_public_gateway.cluster_gateway.id
 }
 
 resource "ibm_resource_instance" "cos_instance" {
