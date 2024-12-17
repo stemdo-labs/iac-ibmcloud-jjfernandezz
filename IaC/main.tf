@@ -46,6 +46,8 @@ resource "ibm_is_security_group_rule" "rule_ssh" {
 resource "ibm_is_ssh_key" "joel_sshkey" {
   name       = "joel-ssh"
   public_key = var.ssh_key
+  type       = "rsa"
+  resource_group = var.resource_group
 }
 
 resource "ibm_is_instance" "joel_instance" {
@@ -104,15 +106,3 @@ resource "ibm_container_vpc_cluster" "joel_cluster" {
       name      = "eu-gb-1"
     }
 }
-
-
-# resource "ibm_container_cluster" "joel_cluster" {
-#   name = "joel-cluster"
-#   datacenter = "eu-gb-1"
-#   machine_type    = "b3c.4x16"
-#   hardware  = "shared"
-#   kube_version = "4.3_openshift"
-#   subnet_id = [ibm_is_subnet.joel_subnet_cluster.id]
-
-#   default_pool_size = 1
-# }
