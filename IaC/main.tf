@@ -23,7 +23,7 @@ resource "ibm_is_subnet" "joel_subnet" {
   name            = "joel-subnet"
   vpc             = ibm_is_vpc.joel_vpc.id
   zone            = "eu-gb-1"
-  ipv4_cidr_block = "10.124.0.0/24"
+  ipv4_cidr_block = "10.242.0.0/18"
   resource_group = var.resource_group
 }
 
@@ -79,7 +79,7 @@ resource "ibm_is_subnet" "joel_subnet_cluster" {
   name            = "joel-subnet-cluster"
   vpc             = ibm_is_vpc.joel_vpc_cluster.id
   zone            = "eu-gb-1"
-  ipv4_cidr_block = "10.134.0.0/24"
+  ipv4_cidr_block = "10.242.0.0/18"
   resource_group = var.resource_group
 }
 
