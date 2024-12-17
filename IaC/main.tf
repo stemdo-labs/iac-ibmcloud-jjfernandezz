@@ -68,6 +68,7 @@ resource "ibm_is_instance" "joel_instance" {
 resource "ibm_is_floating_ip" "joel_floatingip" {
   name   = "joel-fip"
   target = ibm_is_instance.joel_instance.primary_network_interface[0].id
+  resource_group = var.resource_group
 }
 
 ##### Cluster 
