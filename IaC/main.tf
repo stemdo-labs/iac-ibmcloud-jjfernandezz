@@ -52,7 +52,7 @@ resource "ibm_is_ssh_key" "joel_sshkey" {
 
 resource "ibm_is_instance" "joel_instance" {
   name    = "joel-instance"
-  image   = "r010-b89d4f67-1c37-41b0-805f-ccf124e95cb3"
+  image   = "r010-3cc6d91f-5a7f-4556-a4fa-df294e0f864e"
   profile = "bx2-2x8"
   resource_group = var.resource_group
 
