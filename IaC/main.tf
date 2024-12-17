@@ -99,7 +99,7 @@ resource "ibm_container_vpc_cluster" "joel_cluster" {
   vpc_id            = ibm_is_vpc.joel_vpc_cluster.id
   kube_version      = "4.16.23_openshift"
   flavor            = "bx2.16x64"
-  worker_count      = "1"
+  worker_count      = "2"
   # entitlement       = "cloud_pak"
   cos_instance_crn  = ibm_resource_instance.cos_instance.id
   resource_group_id = var.resource_group
