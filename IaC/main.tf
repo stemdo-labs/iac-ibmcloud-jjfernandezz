@@ -91,6 +91,7 @@ resource "ibm_resource_instance" "cos_instance" {
   service  = "cloud-object-storage"
   plan     = "standard"
   location = "global"
+  resource_group_id = var.resource_group
 }
 
 resource "ibm_container_vpc_cluster" "joel_cluster" {
