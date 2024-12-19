@@ -58,6 +58,7 @@ resource "ibm_is_instance" "joel_instance" {
 
   primary_network_interface {
     subnet = ibm_is_subnet.joel_subnet.id
+    security_groups = [ibm_is_security_group.joel_security_group.id]
   }
 
   vpc       = ibm_is_vpc.joel_vpc.id
