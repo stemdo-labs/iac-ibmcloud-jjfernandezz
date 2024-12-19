@@ -1,0 +1,71 @@
+- name: ansible
+  hosts: remoto
+  become: true
+
+  tasks:
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+
+    - name: Install PostgreSQL and dependencies
+      apt:
+        name:
+          - postgresql
+          - postgresql-contrib
+          - libpq-dev
+          - python3-psycopg2
+          - python3-pip
+        state: present
+
+    - name: Crear usuario PostgreSQL
+      become: true
+      become_user: postgres
+      postgresql_user:
+        name: joel
+        password: "{{ postgres_password }}"
+        role_attr_flags: SUPERUSER
+        state: present
+
+    - name: Create a PostgreSQL database
+      become: true
+      become_user: postgres
+      postgresql_db:
+        name: dbjoel
+        owner: "joel"
+        encoding: "UTF8"
+        state: present
+
+    - name: "Start and enable PostgreSQL service"
+      service:
+        name: postgresql
+        state: started
+        enabled: yes
+
+    - name: Set authentication method for PostgreSQL
+      become: true
+      become_user: postgres
+      lineinfile:
+        path: /etc/postgresql/14/main/pg_hba.conf
+        regexp: '^# IPv4 local connections:'
+        line: 'host   all   all   0.0.0.0/0   md5'
+        state: present
+    
+    - name: Configure PostgreSQL to listen on all interfaces
+      become: true
+      become_user: postgres
+      lineinfile:
+        path: /etc/postgresql/14/main/postgresql.conf
+        regexp: '^#listen_addresses ='
+        line: "listen_addresses = '*'"
+        state: present
+
+    - name: Restart PostgreSQL service to apply changes
+      become: true
+      service:
+        name: postgresql
+        state: restarted
+        enabled: true
+        daemon_reload: true
+      async: 120  
+      poll: 10   
+
