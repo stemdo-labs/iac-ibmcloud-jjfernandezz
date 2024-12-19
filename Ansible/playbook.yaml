@@ -22,7 +22,7 @@
       become_user: postgres
       postgresql_user:
         name: joel
-        password: "{{ postgres_password }}"
+        password: password
         role_attr_flags: SUPERUSER
         state: present
 
