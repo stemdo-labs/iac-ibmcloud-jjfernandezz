@@ -43,6 +43,12 @@ resource "ibm_is_security_group_rule" "rule_ssh" {
   }
 }
 
+resource "ibm_is_security_group_rule" "rule_ssh_outbound" {
+  group     = ibm_is_security_group.joel_security_group.id
+  direction = "outbound"
+  remote    = "0.0.0.0/0"
+}
+
 resource "ibm_is_ssh_key" "joel_sshkey" {
   name       = "joel-ssh"
   public_key = var.ssh_key
